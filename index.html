@@ -1,0 +1,443 @@
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+<style type="text/css">
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+}
+h1 {
+  font-weight: 300;
+}
+.disclaimerbox {
+  background-color: #eee;
+  border: 1px solid #eeeeee;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 20px;
+}
+video.header-vid {
+  height: 140px;
+  border: 1px solid black;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+img.header-img {
+  height: 140px;
+  border: 1px solid black;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+img.rounded {
+  border: 0px solid #eeeeee;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+a:link, a:visited {
+  color: #1367a7;
+  text-decoration: none;
+}
+a:hover {
+  color: #208799;
+}
+td.dl-link {
+  height: 160px;
+  text-align: center;
+  font-size: 22px;
+}
+.layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+  box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */ 5px 5px 0 0px #fff, /* The second layer */ 5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */ 10px 10px 0 0px #fff, /* The third layer */ 10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */ 15px 15px 0 0px #fff, /* The fourth layer */ 15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */ 20px 20px 0 0px #fff, /* The fifth layer */ 20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */ 25px 25px 0 0px #fff, /* The fifth layer */ 25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+  margin-left: 10px;
+  margin-right: 45px;
+}
+.layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+  box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */ 5px 5px 0 0px #fff, /* The second layer */ 5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */ 10px 10px 0 0px #fff, /* The third layer */ 10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 30px;
+  margin-bottom: 5px;
+}
+.vert-cent {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+</style>
+<html>
+<head>
+
+<link rel="apple-touch-icon" sizes="180x180" href="./index_files/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./index_files/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./index_files/icon/favicon-16x16.png">
+<link rel="manifest" href="./index_files/icon/site.webmanifest">
+<link rel="mask-icon" href="./index_files/icon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<title>Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model</title>
+
+</head>
+
+<body>
+<br>
+<center>
+  <span style="font-size:42px">Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model</span><br>
+  <table align=center width=1000px>
+    <tr>
+      <td align=center width=200px>
+        <span style="font-size:20px"><a href="https://people.eecs.berkeley.edu/~alexlee_gk/">Alex X. Lee</a></span>
+      </td>
+      <td align=center width=200px>
+        <span style="font-size:20px"><a href="https://people.eecs.berkeley.edu/~nagaban2/">Anusha Nagabandi</a></span>
+      </td>
+      <td align=center width=200px>
+        <span style="font-size:20px"><a href="https://people.eecs.berkeley.edu/~pabbeel">Pieter Abbeel</a></span>
+      </td>
+      <td align=center width=200px>
+        <span style="font-size:20px"><a href="https://people.eecs.berkeley.edu/~svlevine">Sergey Levine</a></span>
+      </td>
+    </tr>
+  </table>
+  <table align=center width=1000px>
+    <tr>
+      <td align=center width=200px>
+        <span style="font-size:18px">University of California, Berkeley</span>
+      </td>
+    </tr>
+  </table>
+  <table align=center width=1000px>
+    <tr>
+      <td align=center width=275px>
+        <span style="font-size:22px"></span>
+      </td>
+      <td align=center width=225px>
+        <span style="font-size:22px">Code<a href='https://github.com/alexlee-gk/slac'> [GitHub]</a></span>
+      </td>
+      <td align=center width=225px>
+        <span style="font-size:22px">arXiv<a href="http://arxiv.org/abs/1907.00953"> [preprint]</a></span>
+      </td>
+      <td align=center width=275px>
+        <span style="font-size:22px"></span>
+      </td>
+    </tr>
+  </table>
+</center>
+<table align=center width=600px>
+  <tr>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_cheetah_run.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_walker_walk.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_ball_in_cup_catch.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_finger_spin.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_HalfCheetah-v2.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Walker2d-v2.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Hopper-v2.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Ant-v2.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_door.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_drawer.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_stack.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dclaw_trainAndEval_forimages.gif" width="150px"></img>
+    </td>
+  </tr>
+</table>
+<br>
+<hr>
+<center>
+  <h1>Abstract</h1>
+</center>
+Deep reinforcement learning (RL) algorithms can use high-capacity deep networks to learn directly from image observations. However, these kinds of observation spaces present a number of challenges in practice, since the policy must now solve two problems: a representation learning problem, and a task learning problem. In this paper, we aim to explicitly learn representations that can accelerate reinforcement learning from images. We propose the stochastic latent actor-critic (SLAC) algorithm: a sample-efficient and high-performing RL algorithm for learning policies for complex continuous control tasks directly from high-dimensional image inputs. SLAC learns a compact latent representation space using a stochastic sequential latent variable model, and then learns a critic model within this latent space. By learning a critic within a compact state space, SLAC can learn much more efficiently than standard RL methods. The proposed model improves performance substantially over alternative representations as well, such as variational autoencoders. In fact, our experimental evaluation demonstrates that the sample efficiency of our resulting method is comparable to that of model-based RL methods that directly use a similar type of model for control. Furthermore, our method outperforms both model-free and model-based alternatives in terms of final performance and sample efficiency, on a range of difficult image-based control tasks.
+<hr>
+<center>
+  <h1>Paper</h1>
+</center>
+<table align=center width=500 px>
+  <tr>
+    <td>
+      <a href="http://arxiv.org/abs/1907.00953"><img class="layered-paper-big" style="height:175px" src="./index_files/1907.00953_page1.jpg"/></a>
+    </td>
+    <td>
+      <span style="font-size:12pt">A. X. Lee, A. Nagabandi, P. Abbeel, S. Levine</span><br>
+      <span style="font-size:12pt"><b>Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model.</b></span><br>
+      <span style="font-size:12pt">arXiv (<a href="http://arxiv.org/abs/1907.00953">preprint</a>).</span>
+    </td>
+  </tr>
+</table>
+<br>
+<table align=center width=600px>
+  <tr>
+    <td align=center>
+        <span style="font-size:28px"><a href="./index_files/lee2019slac.txt">[Bibtex]</a></span>
+    </td>
+  </tr>
+</table>
+<br>
+<hr>
+<center>
+  <h1>DeepMind Control Suite Results</h1>
+</center>
+<table align=center width=1000px>
+  <tr>
+    <td>
+      <a href='https://github.com/alexlee-gk/slac'><img src="./index_files/dm_control_plots.svg" width=900px></img></a>
+    </td>
+  </tr>
+</table>
+<br>
+<table align=center width=800px>
+  <tr>
+    <td align=center colspan="5">
+      <span style="font-size:22px">Example image sequences and samples from the model</span>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Ground Truth Observations</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_cheetah_run_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_walker_walk_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_ball_in_cup_catch_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_finger_spin_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Posterior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_cheetah_run_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_walker_walk_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_ball_in_cup_catch_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_finger_spin_posterior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Conditional Prior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_cheetah_run_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_walker_walk_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_ball_in_cup_catch_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_finger_spin_conditional_prior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Prior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_cheetah_run_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_walker_walk_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_ball_in_cup_catch_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/dm_control_finger_spin_prior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+</table>
+<hr>
+<center>
+  <h1>OpenAI Gym Results</h1>
+</center>
+<table align=center width=1000px>
+  <tr>
+    <td>
+      <a href='https://github.com/alexlee-gk/slac'><img src="./index_files/gym_plots.svg" width=900px></img></a>
+    </td>
+  </tr>
+</table>
+<br>
+<table align=center width=800px>
+  <tr>
+    <td align=center colspan="5">
+      <span style="font-size:22px">Example image sequences and samples from the model</span>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Ground Truth Observations</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_HalfCheetah-v2_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Walker2d-v2_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Hopper-v2_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Ant-v2_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Posterior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_HalfCheetah-v2_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Walker2d-v2_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Hopper-v2_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Ant-v2_posterior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Conditional Prior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_HalfCheetah-v2_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Walker2d-v2_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Hopper-v2_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Ant-v2_conditional_prior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Prior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_HalfCheetah-v2_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Walker2d-v2_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Hopper-v2_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/gym_Ant-v2_prior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+</table>
+<hr>
+<center>
+  <h1>Manipulation Results</h1>
+</center>
+<table align=center width=650px>
+  <tr>
+    <td align=center colspan="5">
+      <span style="font-size:22px">Example image sequences and samples from the model</span>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Ground Truth Observations</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_door_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_drawer_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_stack_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Posterior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_door_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_drawer_posterior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_stack_posterior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Conditional Prior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_door_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_drawer_conditional_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_stack_conditional_prior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td style="white-space:pre-wrap; word-wrap:break-word">Prior Samples</td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_door_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_drawer_prior_images.gif" width="150px"></img>
+    </td>
+    <td align=center width=150px>
+      <img src = "./index_files/images/manipulation_stack_prior_images.gif" width="150px"></img>
+    </td>
+  </tr>
+</table>
+<hr>
+<center>
+  <h1>Acknowledgments</h1>
+</center>
+<table align=center width=1000px>
+  <tr>
+    <td>
+      We thank Marvin Zhang, Abhishek Gupta, and Chelsea Finn for useful discussions and feedback, and we thank Kristian Hartikainen, Danijar Hafner, and Maximilian Igl for providing timely assistance with SAC, PlaNet, and DVRL, respectively. We also thank Deirdre Quillen, Tianhe Yu, and Chelsea Finn for providing us with their suite of Sawyer manipulation tasks. This research was supported by the National Science Foundation through IIS-1651843 and IIS-1700697, as well as ARL DCIST CRA W911NF-17-2-0181 and the Office of Naval Research. Compute support was provided by NVIDIA.
+    </td>
+  </tr>
+</table>
+<br>
+<br>
+</body>
+</html>
