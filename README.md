@@ -1,2 +1,2 @@
-# slac
-Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model
+# Stochastic Latent Actor-Critic
+Code will be released soon.
