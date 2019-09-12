@@ -1,0 +1,6 @@
+# Parameters for train_eval:
+# ==============================================================================
+train_eval.universe = 'dm_control'
+train_eval.domain_name = 'finger'
+train_eval.task_name = 'spin'
+train_eval.action_repeat = 2

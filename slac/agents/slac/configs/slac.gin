@@ -1,0 +1,32 @@
+# Parameters for SlacAgent:
+# ==============================================================================
+SlacAgent.actor_input_stop_gradient = True
+SlacAgent.critic_input_stop_gradient = True
+
+# Parameters for ModelDistributionNetwork:
+# ==============================================================================
+ModelDistributionNetwork.base_depth = 32
+ModelDistributionNetwork.latent1_deterministic = False
+ModelDistributionNetwork.latent2_deterministic = False
+ModelDistributionNetwork.kl_analytic = True
+ModelDistributionNetwork.latent1_size = 32
+ModelDistributionNetwork.latent2_size = 256
+ModelDistributionNetwork.model_reward = True
+ModelDistributionNetwork.name = 'ModelDistributionNetwork'
+
+# Parameters for train_eval:
+# ==============================================================================
+train_eval.critic_input = 'latent'
+train_eval.actor_input = 'sequence_action_feature'
+train_eval.compressor_descriptor = 'model'
+train_eval.model_network_ctor = @model_distribution_network.ModelDistributionNetwork
+
+train_eval.initial_model_train_steps = 100000
+train_eval.num_iterations = 10000000
+train_eval.batch_size = 256
+train_eval.model_batch_size = 32
+train_eval.sequence_length = 8
+
+train_eval.num_eval_episodes = 10
+train_eval.eval_interval = 10000
+train_eval.summary_interval = 10000

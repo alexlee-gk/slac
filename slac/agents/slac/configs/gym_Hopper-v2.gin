@@ -1,0 +1,5 @@
+# Parameters for train_eval:
+# ==============================================================================
+train_eval.universe = 'gym'
+train_eval.env_name = 'Hopper-v2'
+train_eval.action_repeat = 2

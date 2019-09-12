@@ -1,0 +1,6 @@
+# Parameters for train_eval:
+# ==============================================================================
+train_eval.universe = 'dm_control'
+train_eval.domain_name = 'cheetah'
+train_eval.task_name = 'run'
+train_eval.action_repeat = 4

@@ -1,0 +1,6 @@
+# Parameters for train_eval:
+# ==============================================================================
+train_eval.universe = 'dm_control'
+train_eval.domain_name = 'ball_in_cup'
+train_eval.task_name = 'catch'
+train_eval.action_repeat = 4

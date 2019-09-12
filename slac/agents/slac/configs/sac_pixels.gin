@@ -1,0 +1,19 @@
+# Parameters for SlacAgent:
+# ==============================================================================
+SlacAgent.actor_input_stop_gradient = True
+SlacAgent.critic_input_stop_gradient = False  # allow critic to train the compressor
+
+
+# Parameters for train_eval:
+# ==============================================================================
+train_eval.critic_input = 'sequence_feature'
+train_eval.actor_input = 'sequence_feature'
+
+train_eval.initial_model_train_steps = 0
+train_eval.model_train_steps_per_iteration = 0
+train_eval.num_iterations = 10000000
+train_eval.sequence_length = 4
+
+train_eval.num_eval_episodes = 10
+train_eval.eval_interval = 10000
+train_eval.summary_interval = 10000

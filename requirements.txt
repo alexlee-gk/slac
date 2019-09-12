@@ -1,0 +1,9 @@
+absl-py
+gin-config
+tf-nightly-gpu
+tfp-nightly
+tf-estimator-nightly
+tf-agents-nightly
+mujoco-py<2.1,>=2.0
+gym==0.12.1
+git+git://github.com/deepmind/dm_control.git
