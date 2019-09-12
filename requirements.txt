@@ -1,9 +1,8 @@
 absl-py
 gin-config
-tf-nightly-gpu
-tfp-nightly
-tf-estimator-nightly
-tf-agents-nightly
+tf-nightly-gpu==1.15.0.dev20190821
+tfp-nightly==0.9.0.dev20190910
+tf-estimator-nightly==1.14.0.dev2019091001
 mujoco-py<2.1,>=2.0
 gym==0.12.1
 git+git://github.com/deepmind/dm_control.git
