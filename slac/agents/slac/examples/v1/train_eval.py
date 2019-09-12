@@ -279,13 +279,14 @@ def train_eval(
     summaries_flush_secs=10,
     debug_summaries=False,
     summarize_grads_and_vars=False,
+    gpu_allow_growth=False,
     gpu_memory_limit=None):
   """A simple train and eval for SLAC."""
   gpus = tf.config.experimental.list_physical_devices('GPU')
-  if gpu_memory_limit is None:
+  if gpu_allow_growth:
     for gpu in gpus:
       tf.config.experimental.set_memory_growth(gpu, True)
-  else:
+  if gpu_memory_limit:
     for gpu in gpus:
       tf.config.experimental.set_virtual_device_configuration(
           gpu,
