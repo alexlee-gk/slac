@@ -8,7 +8,7 @@ arXiv preprint arXiv:1907.00953, 2019.
 ## Getting started ###
 ### Prerequisites
 - Linux or macOS
-- Python 3
+- Python >=3.5
 - CPU or NVIDIA GPU + CUDA CuDNN
 
 ### Installation
@@ -59,8 +59,12 @@ CUDA_VISIBLE_DEVICES=0 python slac/agents/slac/examples/v1/train_eval.py \
 ```
 
 ## Troubleshooting
-### `No matching distribution found for tf-nightly-gpu==1.15.0.dev20190821` (or similar)
+### `No matching distribution found for tf-nightly-gpu==1.15.0.dev20190821` (or similar) when installing packages in `requirements.txt`.
 Upgrade pip: `pip install --upgrade pip`.
+
+### `pkg_resources.VersionConflict: (setuptools 40.8.0 (.../lib/python3.7/site-packages), Requirement.parse('setuptools>=41.0.0'))` when running `tensorboard`.
+Upgrade setuptools: `pip install --upgrade setuptools`.
+
 ### Other errors
 Make sure to exactly use the versions of the python packages in the `requirements.txt` file and in the installation instructions, e.g.
 ```
