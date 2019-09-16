@@ -26,9 +26,9 @@ cd slac
 ```bash
 pip install -r requirements.txt
 ```
-- Install the `tf_agents` package. Until [tensorflow/agents#206](https://github.com/tensorflow/agents/issues/206) is fixed, use this fork:
+- Install the `tf_agents` package:
 ```bash
-pip install git+git://github.com/alexlee-gk/agents-1.git
+pip install git+git://github.com/tensorflow/agents.git
 ```
 - Install ffmpeg (optional, used to generate GIFs for visualization in TensorBoard).
 - For some python installations, the root directory should be added to the `PYTHONPATH`:
@@ -56,6 +56,16 @@ CUDA_VISIBLE_DEVICES=0 python slac/agents/slac/examples/v1/train_eval.py \
   --gin_param train_eval.gpu_allow_growth=True \
   --gin_param train_eval.sequence_length=8 \
   --gin_param train_eval.action_repeat=2
+```
+
+## Troubleshooting
+### `No matching distribution found for tf-nightly-gpu==1.15.0.dev20190821` (or similar)
+Upgrade pip: `pip install --upgrade pip`.
+### Other errors
+Make sure to exactly use the versions of the python packages in the `requirements.txt` file and in the installation instructions, e.g.
+```
+pip install --upgrade -r requirements.txt
+pip install --upgrade git+git://github.com/tensorflow/agents.git
 ```
 
 ## Citation
