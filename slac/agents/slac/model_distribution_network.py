@@ -35,7 +35,7 @@ class Bernoulli(tf.Module):
 
 
 class Normal(tf.Module):
-  def __init__(self, base_depth, scale, name=None):
+  def __init__(self, base_depth, scale=None, name=None):
     super(Normal, self).__init__(name=name)
     self.scale = scale
     self.dense1 = tf.keras.layers.Dense(base_depth, activation=tf.nn.leaky_relu)
@@ -61,12 +61,14 @@ class Normal(tf.Module):
 
 
 class MultivariateNormalDiag(tf.Module):
-  def __init__(self, base_depth, latent_size, name=None):
+  def __init__(self, base_depth, latent_size, scale=None, name=None):
     super(MultivariateNormalDiag, self).__init__(name=name)
     self.latent_size = latent_size
+    self.scale = scale
     self.dense1 = tf.keras.layers.Dense(base_depth, activation=tf.nn.leaky_relu)
     self.dense2 = tf.keras.layers.Dense(base_depth, activation=tf.nn.leaky_relu)
-    self.output_layer = tf.keras.layers.Dense(2 * latent_size)
+    self.output_layer = tf.keras.layers.Dense(
+        2 * latent_size if self.scale is None else latent_size)
 
   def __call__(self, *inputs):
     if len(inputs) > 1:
@@ -77,7 +79,12 @@ class MultivariateNormalDiag(tf.Module):
     out = self.dense2(out)
     out = self.output_layer(out)
     loc = out[..., :self.latent_size]
-    scale_diag = tf.nn.softplus(out[..., self.latent_size:]) + 1e-5
+    if self.scale is None:
+      assert out.shape[-1].value == 2 * self.latent_size
+      scale_diag = tf.nn.softplus(out[..., self.latent_size:]) + 1e-5
+    else:
+      assert out.shape[-1].value == self.latent_size
+      scale_diag = tf.ones_like(loc) * self.scale
     return tfd.MultivariateNormalDiag(loc=loc, scale_diag=scale_diag)
 
 
@@ -97,39 +104,29 @@ class Deterministic(tf.Module):
     out = self.dense1(inputs)
     out = self.dense2(out)
     loc = self.output_layer(out)
-    return tfd.Deterministic(loc=loc)
+    return tfd.VectorDeterministic(loc=loc)
 
 
 class ConstantMultivariateNormalDiag(tf.Module):
-  def __init__(self, latent_size, name=None):
+  def __init__(self, latent_size, scale=None, name=None):
     super(ConstantMultivariateNormalDiag, self).__init__(name=name)
     self.latent_size = latent_size
+    self.scale = scale
 
   def __call__(self, *inputs):
     # first input should not have any dimensions after the batch_shape, step_type
     batch_shape = tf.shape(inputs[0])  # input is only used to infer batch_shape
     shape = tf.concat([batch_shape, [self.latent_size]], axis=0)
     loc = tf.zeros(shape)
-    scale_diag = tf.ones(shape)
+    if self.scale is None:
+      scale_diag = tf.ones(shape)
+    else:
+      scale_diag = tf.ones(shape) * self.scale
     return tfd.MultivariateNormalDiag(loc=loc, scale_diag=scale_diag)
 
 
-class ConstantDeterministic(tf.Module):
-  def __init__(self, latent_size, name=None):
-    super(ConstantDeterministic, self).__init__(name=name)
-    self.latent_size = latent_size
-
-  def __call__(self, *inputs):
-    # first input should not have any dimensions after the batch_shape, step_type
-    batch_shape = tf.shape(inputs[0])  # input is only used to infer batch_shape
-    shape = tf.concat([batch_shape, [self.latent_size]], axis=0)
-    loc = tf.zeros(shape)
-    return tfd.Deterministic(loc=loc)
-
-
 class Decoder(tf.Module):
-  """Probabilistic decoder for `p(x_t | z_t)`.
-  """
+  """Probabilistic decoder for `p(x_t | z_t)`."""
 
   def __init__(self, base_depth, channels=3, scale=1.0, name=None):
     super(Decoder, self).__init__(name=name)
@@ -165,8 +162,7 @@ class Decoder(tf.Module):
 
 
 class Compressor(tf.Module):
-  """Feature extractor.
-  """
+  """Feature extractor."""
 
   def __init__(self, base_depth, feature_size, name=None):
     super(Compressor, self).__init__(name=name)
@@ -202,8 +198,6 @@ class ModelDistributionNetwork(tf.Module):
                latent1_size=32,
                latent2_size=256,
                kl_analytic=True,
-               latent1_deterministic=False,
-               latent2_deterministic=False,
                model_reward=False,
                model_discount=False,
                decoder_stddev=np.sqrt(0.1, dtype=np.float32),
@@ -216,21 +210,12 @@ class ModelDistributionNetwork(tf.Module):
     self.latent1_size = latent1_size
     self.latent2_size = latent2_size
     self.kl_analytic = kl_analytic
-    self.latent1_deterministic = latent1_deterministic
-    self.latent2_deterministic = latent2_deterministic
     self.model_reward = model_reward
     self.model_discount = model_discount
 
-    if self.latent1_deterministic:
-      latent1_first_prior_distribution_ctor = ConstantDeterministic
-      latent1_distribution_ctor = Deterministic
-    else:
-      latent1_first_prior_distribution_ctor = ConstantMultivariateNormalDiag
-      latent1_distribution_ctor = MultivariateNormalDiag
-    if self.latent2_deterministic:
-      latent2_distribution_ctor = Deterministic
-    else:
-      latent2_distribution_ctor = MultivariateNormalDiag
+    latent1_first_prior_distribution_ctor = ConstantMultivariateNormalDiag
+    latent1_distribution_ctor = MultivariateNormalDiag
+    latent2_distribution_ctor = MultivariateNormalDiag
 
     # p(z_1^1)
     self.latent1_first_prior = latent1_first_prior_distribution_ctor(latent1_size)
@@ -313,37 +298,30 @@ class ModelDistributionNetwork(tf.Module):
 
     outputs = {}
 
-    if self.latent1_deterministic:
-      latent1_kl_divergences = 0.0
+    if self.kl_analytic:
+      latent1_kl_divergences = tfd.kl_divergence(latent1_posterior_dists, latent1_prior_dists)
     else:
-      if self.kl_analytic:
-        latent1_kl_divergences = tfd.kl_divergence(latent1_posterior_dists, latent1_prior_dists)
-      else:
-        latent1_kl_divergences = (latent1_posterior_dists.log_prob(latent1_posterior_samples)
-                                  - latent1_prior_dists.log_prob(latent1_posterior_samples))
-      latent1_kl_divergences = tf.reduce_sum(latent1_kl_divergences, axis=1)
-      outputs.update({
-        'latent1_kl_divergence': tf.reduce_mean(latent1_kl_divergences),
-      })
-    if self.latent2_deterministic:
+      latent1_kl_divergences = (latent1_posterior_dists.log_prob(latent1_posterior_samples)
+                                - latent1_prior_dists.log_prob(latent1_posterior_samples))
+    latent1_kl_divergences = tf.reduce_sum(latent1_kl_divergences, axis=1)
+    outputs.update({
+      'latent1_kl_divergence': tf.reduce_mean(latent1_kl_divergences),
+    })
+    if self.latent2_posterior == self.latent2_prior:
       latent2_kl_divergences = 0.0
     else:
-      if self.latent2_posterior == self.latent2_prior:
-        latent2_kl_divergences = 0.0
+      if self.kl_analytic:
+        latent2_kl_divergences = tfd.kl_divergence(latent2_posterior_dists, latent2_prior_dists)
       else:
-        if self.kl_analytic:
-          latent2_kl_divergences = tfd.kl_divergence(latent2_posterior_dists, latent2_prior_dists)
-        else:
-          latent2_kl_divergences = (latent2_posterior_dists.log_prob(latent2_posterior_samples)
-                                    - latent2_prior_dists.log_prob(latent2_posterior_samples))
-        latent2_kl_divergences = tf.reduce_sum(latent2_kl_divergences, axis=1)
-      outputs.update({
-        'latent2_kl_divergence': tf.reduce_mean(latent2_kl_divergences),
-      })
-    if not self.latent1_deterministic or not self.latent2_deterministic:
-      outputs.update({
-        'kl_divergence': tf.reduce_mean(latent1_kl_divergences + latent2_kl_divergences),
-      })
+        latent2_kl_divergences = (latent2_posterior_dists.log_prob(latent2_posterior_samples)
+                                  - latent2_prior_dists.log_prob(latent2_posterior_samples))
+      latent2_kl_divergences = tf.reduce_sum(latent2_kl_divergences, axis=1)
+    outputs.update({
+      'latent2_kl_divergence': tf.reduce_mean(latent2_kl_divergences),
+    })
+    outputs.update({
+      'kl_divergence': tf.reduce_mean(latent1_kl_divergences + latent2_kl_divergences),
+    })
 
     likelihood_dists = self.decoder(latent1_posterior_samples, latent2_posterior_samples)
     likelihood_log_probs = likelihood_dists.log_prob(images)
