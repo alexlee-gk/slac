@@ -12,7 +12,7 @@ SlacModelDistributionNetwork.latent1_size = 32
 SlacModelDistributionNetwork.latent2_size = 256
 SlacModelDistributionNetwork.kl_analytic = True
 SlacModelDistributionNetwork.model_reward = True
-SlacModelDistributionNetwork.name = 'HalfDeterministicModelDistributionNetwork'
+SlacModelDistributionNetwork.name = 'PartiallyStochasticModelDistributionNetwork'
 
 # Parameters for train_eval:
 # ==============================================================================
