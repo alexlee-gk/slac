@@ -15,6 +15,7 @@ from slac.utils import nest_utils
 tfd = tfp.distributions
 
 
+@gin.configurable
 class Bernoulli(tf.Module):
   def __init__(self, base_depth, name=None):
     super(Bernoulli, self).__init__(name=name)
@@ -34,6 +35,7 @@ class Bernoulli(tf.Module):
     return tfd.Bernoulli(logits=logits)
 
 
+@gin.configurable
 class Normal(tf.Module):
   def __init__(self, base_depth, scale=None, name=None):
     super(Normal, self).__init__(name=name)
@@ -60,6 +62,7 @@ class Normal(tf.Module):
     return tfd.Normal(loc=loc, scale=scale)
 
 
+@gin.configurable
 class MultivariateNormalDiag(tf.Module):
   def __init__(self, base_depth, latent_size, scale=None, name=None):
     super(MultivariateNormalDiag, self).__init__(name=name)
@@ -88,6 +91,7 @@ class MultivariateNormalDiag(tf.Module):
     return tfd.MultivariateNormalDiag(loc=loc, scale_diag=scale_diag)
 
 
+@gin.configurable
 class Deterministic(tf.Module):
   def __init__(self, base_depth, latent_size, name=None):
     super(Deterministic, self).__init__(name=name)
@@ -107,6 +111,7 @@ class Deterministic(tf.Module):
     return tfd.VectorDeterministic(loc=loc)
 
 
+@gin.configurable
 class ConstantMultivariateNormalDiag(tf.Module):
   def __init__(self, latent_size, scale=None, name=None):
     super(ConstantMultivariateNormalDiag, self).__init__(name=name)
@@ -125,6 +130,7 @@ class ConstantMultivariateNormalDiag(tf.Module):
     return tfd.MultivariateNormalDiag(loc=loc, scale_diag=scale_diag)
 
 
+@gin.configurable
 class Decoder(tf.Module):
   """Probabilistic decoder for `p(x_t | z_t)`."""
 
@@ -161,6 +167,7 @@ class Decoder(tf.Module):
         reinterpreted_batch_ndims=3)  # wrap (h, w, c)
 
 
+@gin.configurable
 class Compressor(tf.Module):
   """Feature extractor."""
 

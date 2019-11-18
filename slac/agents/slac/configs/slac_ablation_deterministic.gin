@@ -1,0 +1,44 @@
+# Parameters for SlacAgent:
+# ==============================================================================
+SlacAgent.actor_input_stop_gradient = True
+SlacAgent.critic_input_stop_gradient = True
+
+# Parameters for ConstantMultivariateNormalDiag:
+# ==============================================================================
+ConstantMultivariateNormalDiag.scale = 1.0
+
+# Parameters for MultivariateNormalDiag:
+# ==============================================================================
+MultivariateNormalDiag.scale = 1.0
+
+# Parameters for SlacModelDistributionNetwork:
+# ==============================================================================
+SlacModelDistributionNetwork.latent1_first_prior_distribution_ctor = @model_distribution_network.ConstantMultivariateNormalDiag
+SlacModelDistributionNetwork.latent1_prior_distribution_ctor = @model_distribution_network.MultivariateNormalDiag
+SlacModelDistributionNetwork.latent1_posterior_distribution_ctor = @model_distribution_network.Deterministic
+SlacModelDistributionNetwork.latent2_prior_distribution_ctor = @model_distribution_network.Deterministic
+SlacModelDistributionNetwork.latent2_posterior_distribution_ctor = @model_distribution_network.Deterministic
+SlacModelDistributionNetwork.base_depth = 32
+SlacModelDistributionNetwork.latent1_size = 32
+SlacModelDistributionNetwork.latent2_size = 256
+SlacModelDistributionNetwork.kl_analytic = False  # has to be False
+SlacModelDistributionNetwork.skip_first_kl = True  # has to be True
+SlacModelDistributionNetwork.model_reward = True
+SlacModelDistributionNetwork.name = 'DeterministicModelDistributionNetwork'
+
+# Parameters for train_eval:
+# ==============================================================================
+train_eval.critic_input = 'latent'
+train_eval.actor_input = 'sequence_action_feature'
+train_eval.compressor_descriptor = 'model'
+train_eval.model_network_ctor = @ablation_model_distribution_network.SlacModelDistributionNetwork
+
+train_eval.initial_model_train_steps = 100000
+train_eval.num_iterations = 10000000
+train_eval.batch_size = 256
+train_eval.model_batch_size = 32
+train_eval.sequence_length = 8
+
+train_eval.num_eval_episodes = 10
+train_eval.eval_interval = 10000
+train_eval.summary_interval = 10000
