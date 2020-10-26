@@ -126,7 +126,7 @@ hr {
         <span style="font-size:22px">Code<a href='https://github.com/alexlee-gk/slac'> [GitHub]</a></span>
       </td>
       <td align=center width=225px>
-        <span style="font-size:22px">arXiv<a href="http://arxiv.org/abs/1907.00953"> [preprint]</a></span>
+        <span style="font-size:22px">Paper<a href="http://arxiv.org/abs/1907.00953"> [arXiv]</a></span>
       </td>
       <td align=center width=275px>
         <span style="font-size:22px"></span>
@@ -183,7 +183,7 @@ hr {
 <center>
   <h1>Abstract</h1>
 </center>
-Deep reinforcement learning (RL) algorithms can use high-capacity deep networks to learn directly from image observations. However, these kinds of observation spaces present a number of challenges in practice, since the policy must now solve two problems: a representation learning problem, and a task learning problem. In this paper, we aim to explicitly learn representations that can accelerate reinforcement learning from images. We propose the stochastic latent actor-critic (SLAC) algorithm: a sample-efficient and high-performing RL algorithm for learning policies for complex continuous control tasks directly from high-dimensional image inputs. SLAC learns a compact latent representation space using a stochastic sequential latent variable model, and then learns a critic model within this latent space. By learning a critic within a compact state space, SLAC can learn much more efficiently than standard RL methods. The proposed model improves performance substantially over alternative representations as well, such as variational autoencoders. In fact, our experimental evaluation demonstrates that the sample efficiency of our resulting method is comparable to that of model-based RL methods that directly use a similar type of model for control. Furthermore, our method outperforms both model-free and model-based alternatives in terms of final performance and sample efficiency, on a range of difficult image-based control tasks.
+Deep reinforcement learning (RL) algorithms can use high-capacity deep networks to learn directly from image observations. However, these high-dimensional observation spaces present a number of  challenges in practice, since the policy must now solve two problems: representation learning and task learning. In this work, we tackle these two problems separately, by explicitly learning latent representations that can accelerate reinforcement learning from images. We propose the stochastic latent actor-critic (SLAC) algorithm: a sample-efficient and high-performing RL algorithm for learning policies for complex continuous control tasks directly from high-dimensional image inputs. SLAC provides a novel and principled approach for unifying stochastic sequential models and RL into a single method, by learning a compact latent representation and then performing RL in the model's learned latent space. Our experimental evaluation demonstrates that our method outperforms both model-free and model-based alternatives in terms of final performance and sample efficiency, on a range of difficult image-based control tasks.
 <hr>
 <center>
   <h1>Paper</h1>
@@ -196,7 +196,7 @@ Deep reinforcement learning (RL) algorithms can use high-capacity deep networks 
     <td>
       <span style="font-size:12pt">A. X. Lee, A. Nagabandi, P. Abbeel, S. Levine</span><br>
       <span style="font-size:12pt"><b>Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model.</b></span><br>
-      <span style="font-size:12pt">arXiv (<a href="http://arxiv.org/abs/1907.00953">preprint</a>).</span>
+      <span style="font-size:12pt">In <i>Neural Information Processing Systems (NeurIPS)</i>, 2020. <a href="http://arxiv.org/abs/1907.00953">[arXiv]</a></span>
     </td>
   </tr>
 </table>
@@ -204,7 +204,7 @@ Deep reinforcement learning (RL) algorithms can use high-capacity deep networks 
 <table align=center width=600px>
   <tr>
     <td align=center>
-        <span style="font-size:28px"><a href="./index_files/lee2019slac.txt">[Bibtex]</a></span>
+        <span style="font-size:28px"><a href="./index_files/lee2020slac.txt">[Bibtex]</a></span>
     </td>
   </tr>
 </table>
