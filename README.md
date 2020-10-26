@@ -3,7 +3,7 @@
 
 **Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model,**  
 [Alex X. Lee](https://alexlee-gk.github.io/), [Anusha Nagabandi](https://people.eecs.berkeley.edu/~nagaban2/), [Pieter Abbeel](https://people.eecs.berkeley.edu/~pabbeel/), [Sergey Levine](https://people.eecs.berkeley.edu/~svlevine/).  
-arXiv preprint arXiv:1907.00953, 2019.
+In *Neural Information Processing Systems (NeurIPS)*, 2020.
 
 ## Getting started ###
 ### Prerequisites
@@ -76,10 +76,10 @@ pip install --upgrade git+git://github.com/tensorflow/agents.git
 If you find this useful for your research, please use the following.
 
 ```
-@article{lee2019slac,
+@inproceedings{lee2020slac,
   title={Stochastic Latent Actor-Critic: Deep Reinforcement Learning with a Latent Variable Model},
   author={Alex X. Lee and Anusha Nagabandi and Pieter Abbeel and Sergey Levine},
-  journal={arXiv preprint arXiv:1907.00953},
-  year={2019}
+  booktitle={Neural Information Processing Systems (NeurIPS)},
+  year={2020}
 }
 ```
